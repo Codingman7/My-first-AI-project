@@ -1,0 +1,111 @@
+<doctype>
+<html>
+<head>
+	<title> My artifical inteligence practice </title>
+	<script src="https://simplycoding.org/files/simplyjs/simply.js"></script>
+</head>
+<script>
+//JavaScript code here!
+function start(){
+sjs.open("target",700,400);
+
+var player = new sjs.Image("Images/space_r.png");
+player.type = "player";
+player.setSize(100,50);
+player.center();
+
+sjs.keyDown(RIGHT_KEY, function(){
+  player.setImage("Images/space_r.png");
+  player.pushRight();
+});
+
+sjs.keyDown(LEFT_KEY, function(){
+  player.setImage("Images/space_l.png");
+  player.pushLeft();
+});
+
+sjs.keyDown(UP_KEY, function(){
+  player.pushUp();
+});
+
+sjs.keyDown(DOWN_KEY, function(){
+  player.pushDown();
+});
+
+var enemy = new sjs.Image("Images/shark_right.png");
+enemy.type = "enemy";
+enemy.setSize(100,50);
+enemy.center().top();
+
+setInterval(function(){
+  console.log(player.x + " , " + enemy.x);
+},500);
+
+setInterval(function(){
+  console.log(player.y + " , " + enemy.y);
+},500);
+
+  setInterval(function(){
+    if(player.x > enemy.x){
+      enemy.pushRight(.35);
+    } else {
+      enemy.pushLeft(.35);
+    }
+  },50);
+
+  setInterval(function(){
+    if(player.y < enemy.y){
+      enemy.pushUp(.35);
+    } else {
+      enemy.pushDown(.35);
+    }
+  },50);
+
+  //timer and healthbar code
+
+  var timer = 20;
+ var countDown = new sjs.Text("Timer: "+timer, 20, "white");
+ countDown.right().offset(-10);
+
+ var time = setInterval(function(){
+  timer--;
+  countDown.setText("Timer: "+timer);
+  if(timer <= 0){
+    var btn = new sjs.Button("WINNER! Next level?", function(){
+      window.location = "main.html";
+    });
+    btn.center();
+    clearInterval(time);
+  }
+ },1000);
+
+var healthPixels = 200;
+ var health = new sjs.Text("Health",20,"white");
+ health.node.style.height = "20px";
+ health.node.style.width = healthPixels+"px";
+ health.moveTo(10,10);
+ health.node.style.backgroundColor = "red";
+
+ sjs.onHit("player", "enemy", function(x,y){
+  healthPixels-=40;
+  health.node.style.width = healthPixels+"px";
+  if(healthPixels <= 0){
+    x.destroy();
+      setTimeout(function(){
+        explosion.destroy();
+      },888);
+      var btn = new sjs.Button("You Lost! Play Again?", function(){
+          window.location = "main.html";
+      });
+      btn.center();
+      clearInterval(time);
+  }
+ });
+} //end function start
+
+</script>
+<body onload="start()">
+	<h1> My Artifical Inteligence practice </h1>
+			<div id="target" style="margin:auto;background:blue;"></div>
+</body>
+</html>
